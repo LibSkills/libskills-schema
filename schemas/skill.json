@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://libskills.dev/schemas/v1/skill.json",
+  "title": "LibSkills Skill Metadata",
+  "type": "object",
+  "required": [
+    "name", "repo", "language", "tier", "group",
+    "version", "skill_version", "schema",
+    "trust_score", "updated_at", "tags"
+  ],
+  "properties": {
+    "name": { "type": "string", "description": "Library name" },
+    "repo": { "type": "string", "description": "GitHub repo (author/name)" },
+    "language": { "type": "string", "enum": ["cpp", "rust", "python", "go", "js"] },
+    "tier": { "type": "string", "enum": ["tier1", "tier2"] },
+    "group": { "type": "string", "enum": ["main", "contrib"] },
+    "version": { "type": "string", "description": "Library version this skill targets" },
+    "skill_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "schema": { "type": "string", "pattern": "^libskills/v\\d+$" },
+    "trust_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "verified": { "type": "boolean" },
+    "official": { "type": "boolean" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "completeness": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "compatibility": {
+      "type": "object",
+      "properties": {
+        "c++": { "type": "array", "items": { "type": "string" } },
+        "platforms": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "array", "items": { "type": "string" } },
+        "optional": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "tier1": { "type": "array", "items": { "type": "string" } },
+        "tier2": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

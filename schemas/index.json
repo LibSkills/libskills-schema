@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://libskills.dev/schemas/v1/index.json",
+  "title": "LibSkills Registry Index",
+  "type": "object",
+  "required": ["schema", "version", "updated_at", "skills"],
+  "properties": {
+    "schema": { "type": "string" },
+    "version": { "type": "integer" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "name", "language", "tier", "group"],
+        "properties": {
+          "key": { "type": "string" },
+          "name": { "type": "string" },
+          "language": { "type": "string" },
+          "tier": { "type": "string" },
+          "group": { "type": "string" },
+          "version": { "type": "string" },
+          "trust_score": { "type": "integer" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}
