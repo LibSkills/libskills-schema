@@ -1,28 +1,87 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://libskills.dev/schemas/v1/index.json",
-  "title": "LibSkills Registry Index",
+  "title": "LibSkills Aggregation Index v1",
   "type": "object",
   "required": ["schema", "version", "updated_at", "skills"],
   "properties": {
-    "schema": { "type": "string" },
-    "version": { "type": "integer" },
-    "updated_at": { "type": "string", "format": "date-time" },
+    "schema": {
+      "type": "string",
+      "description": "Schema version: libskills/v0"
+    },
+    "version": {
+      "type": "integer",
+      "description": "Index version number (incremented on each update)"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
     "skills": {
       "type": "array",
+      "description": "Aggregated skill entries from repos and submissions",
       "items": {
         "type": "object",
         "required": ["key", "name", "language", "tier", "group"],
         "properties": {
-          "key": { "type": "string" },
-          "name": { "type": "string" },
-          "language": { "type": "string" },
-          "tier": { "type": "string" },
-          "group": { "type": "string" },
-          "version": { "type": "string" },
-          "trust_score": { "type": "integer" },
-          "tags": { "type": "array", "items": { "type": "string" } },
-          "summary": { "type": "string" }
+          "key": {
+            "type": "string",
+            "description": "Path key: {language}/{author}/{name}"
+          },
+          "name": {
+            "type": "string",
+            "description": "Library name"
+          },
+          "language": {
+            "type": "string",
+            "description": "Programming language"
+          },
+          "tier": {
+            "type": "string",
+            "description": "Quality tier"
+          },
+          "group": {
+            "type": "string",
+            "description": "Main or contrib"
+          },
+          "version": {
+            "type": "string",
+            "description": "Library version this skill targets"
+          },
+          "trust_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Trustworthiness score"
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Search tags"
+          },
+          "summary": {
+            "type": "string",
+            "description": "One-line description of the library"
+          },
+          "repo_source_url": {
+            "type": "string",
+            "description": "URL to the library's repository (for .libskills/ discovery)"
+          },
+          "repo_skill": {
+            "type": "boolean",
+            "description": "True if skill originates from the library's own repo"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": ["repo", "registry", "mirror"],
+            "description": "Source: repo (.libskills/), registry (submitted directly), or mirror"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Risk level for AI consumption priority"
+          }
         }
       }
     }
