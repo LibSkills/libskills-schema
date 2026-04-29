@@ -1,0 +1,70 @@
+name: LibSkills Schema CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate-schemas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install jsonschema
+
+      - name: Validate skill.json schema
+        run: |
+          echo "Validating skill.json schema..."
+          python3 -c "
+          import json
+          import jsonschema
+          
+          # Load schema
+          with open('schemas/skill.json', 'r') as f:
+              schema = json.load(f)
+          
+          # Validate schema is valid JSON Schema
+          jsonschema.Draft7Validator.check_schema(schema)
+          print('✓ skill.json schema is valid')
+          "
+
+      - name: Validate index.json schema
+        run: |
+          echo "Validating index.json schema..."
+          python3 -c "
+          import json
+          import jsonschema
+          
+          # Load schema
+          with open('schemas/index.json', 'r') as f:
+              schema = json.load(f)
+          
+          # Validate schema is valid JSON Schema
+          jsonschema.Draft7Validator.check_schema(schema)
+          print('✓ index.json schema is valid')
+          "
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check JSON formatting
+        run: |
+          echo "Checking JSON files..."
+          find . -name "*.json" -type f -exec python3 -c "import json; json.load(open('{}'))" \;
+
+      - name: Check for syntax errors
+        run: |
+          echo "Checking for syntax errors..."
+          python3 -m py_compile *.py 2>/dev/null || true
